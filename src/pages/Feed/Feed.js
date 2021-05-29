@@ -105,7 +105,14 @@ class Feed extends Component {
     this.setState({
       editLoading: true,
     });
-    // Set up data (with image!)
+
+    // FormData() is used to do what "<form enctype='multipart/form-data'" does.
+    // It automatically sets the headers and changes the format from json
+    // to something that supports adding files in the request.
+    const formData = new FormData();
+    formData.append("title", postData.title);
+    formData.append("content", postData.content);
+    formData.append("image", postData.image); // we set 'image' during multer registration
     let url = "http://localhost:8080/feed/post";
     let method = "POST";
 
@@ -115,13 +122,7 @@ class Feed extends Component {
 
     fetch(url, {
       method: method,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        title: postData.title,
-        content: postData.content,
-      }),
+      body: formData,
     })
       .then((res) => {
         if (res.status !== 200 && res.status !== 201) {
