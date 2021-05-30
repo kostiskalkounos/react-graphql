@@ -22,7 +22,11 @@ class Feed extends Component {
   };
 
   componentDidMount() {
-    fetch("URL")
+    fetch("http://localhost:8080/auth/status", {
+      headers: {
+        Authorization: "Bearer " + this.props.token,
+      },
+    })
       .then((res) => {
         if (res.status !== 200) {
           throw new Error("Failed to fetch user status.");
@@ -51,7 +55,9 @@ class Feed extends Component {
       this.setState({ postPage: page });
     }
     fetch("http://localhost:8080/feed/posts?page=" + page, {
-      Autorization: "Bearer " + this.props.token,
+      headers: {
+        Authorization: "Bearer " + this.props.token,
+      },
     })
       .then((res) => {
         if (res.status !== 200) {
@@ -79,7 +85,16 @@ class Feed extends Component {
 
   statusUpdateHandler = (event) => {
     event.preventDefault();
-    fetch("URL")
+    fetch("http://localhost:8080/auth/status", {
+      method: "PATCH",
+      headers: {
+        Authorization: "Bearer " + this.props.token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        status: this.state.status,
+      }),
+    })
       .then((res) => {
         if (res.status !== 200 && res.status !== 201) {
           throw new Error("Can't update status!");
@@ -135,7 +150,7 @@ class Feed extends Component {
       method: method,
       body: formData,
       headers: {
-        Autorization: "Bearer " + this.props.token,
+        Authorization: "Bearer " + this.props.token,
       },
     })
       .then((res) => {
@@ -191,7 +206,7 @@ class Feed extends Component {
     fetch("http://localhost:8080/feed/post/" + postId, {
       method: "DELETE",
       headers: {
-        Autorization: "Bearer " + this.props.token,
+        Authorization: "Bearer " + this.props.token,
       },
     })
       .then((res) => {
