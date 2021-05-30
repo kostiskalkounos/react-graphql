@@ -1,1 +1,1 @@
-# react-rest-api
+# react-GraphQL
